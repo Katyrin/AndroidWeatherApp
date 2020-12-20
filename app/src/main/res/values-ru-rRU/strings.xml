@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Weather App</string>
+    <string name="t">C°</string>
+    <string name="city">Город</string>
+    <string name="add_city">Добавить город</string>
+    <string name="mountain">Гора</string>
+    <string name="weather_image">Изображение погоды</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="next_day">Следующий День</string>
+    <string name="percent">%</string>
+    <string name="pressure_text">Давление</string>
+    <string name="humidity">Влажность</string>
+    <string name="wind">Ветер</string>
+    <string name="today">Сегодня</string>
+    <string name="pressure">бар</string>
+    <string name="speed">км/ч</string>
+</resources>
