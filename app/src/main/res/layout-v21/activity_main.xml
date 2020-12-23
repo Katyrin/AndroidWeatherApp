@@ -46,7 +46,7 @@
 
                 <ImageButton
                     android:id="@+id/addCityButton"
-                    android:layout_width="@dimen/zero_size"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
@@ -56,12 +56,12 @@
 
                 <TextView
                     android:id="@+id/cityTextView"
-                    android:layout_width="@dimen/zero_size"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="9"
                     android:gravity="center"
                     android:text="@string/city"
-                    android:textSize="@dimen/head"
+                    android:textSize="36sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -83,7 +83,7 @@
 
                 <ImageView
                     android:id="@+id/weatherImageView"
-                    android:layout_width="@dimen/zero_size"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:contentDescription="@string/weather_image"
@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/background_color"
-                android:padding="@dimen/between_layouts">
+                android:elevation="@dimen/elevation">
 
                 <TableRow
                     android:layout_width="match_parent"
