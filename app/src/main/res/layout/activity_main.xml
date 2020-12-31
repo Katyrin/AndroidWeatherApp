@@ -263,7 +263,7 @@
                     android:contentDescription="@string/wind" />
 
                 <TextView
-                    android:id="@+id/textView12"
+                    android:id="@+id/humidityTextView"
                     android:layout_width="@dimen/zero_size"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

@@ -43,6 +43,7 @@
                     android:textSize="@dimen/head2" />
 
                 <RadioGroup
+                    android:id="@+id/amountDayRadioGroup"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
