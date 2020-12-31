@@ -1,7 +1,6 @@
 package com.katyrin.weatherapp;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
