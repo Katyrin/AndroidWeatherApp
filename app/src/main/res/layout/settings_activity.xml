@@ -60,13 +60,15 @@
             android:textSize="@dimen/head2" />
 
         <RadioGroup
+            android:id="@+id/amountDayRadioGroup"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <RadioButton
                 android:id="@+id/threeRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="@string/three_days_ahead" />
 
             <RadioButton
