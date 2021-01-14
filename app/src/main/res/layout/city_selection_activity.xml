@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/citySelectionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_constraintBottom_toBottomOf="parent"
@@ -18,30 +19,35 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/between_layouts">
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/enterCityEditText"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="@dimen/zero_size"
                 android:layout_height="match_parent"
-                android:layout_weight="9"
-                android:autofillHints=""
-                android:background="@color/background_color"
-                android:hint="@string/enter_city"
-                android:inputType="none"
-                android:singleLine="true"
-                android:textSize="@dimen/head2" />
+                android:layout_marginBottom="@dimen/between_layouts"
+                android:layout_weight="5">
 
-            <ImageButton
-                android:id="@+id/citySelectionImageButton"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/enterCityEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/enter_city"
+                    android:inputType="textCapWords"
+                    android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/saveCitySettingsFAB"
                 android:layout_width="@dimen/zero_size"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/between_layouts"
                 android:layout_weight="1"
-                android:contentDescription="@android:string/search_go"
-                app:srcCompat="@drawable/ic_baseline_search_24">
-
-            </ImageButton>
+                android:clickable="true"
+                android:contentDescription="@string/enter_city"
+                android:focusable="true"
+                app:srcCompat="@drawable/ic_baseline_add_24" />
 
         </LinearLayout>
 

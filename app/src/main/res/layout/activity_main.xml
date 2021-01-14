@@ -44,25 +44,28 @@
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/between_layouts">
 
-                <ImageButton
-                    android:id="@+id/addCityButton"
-                    android:layout_width="@dimen/zero_size"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:contentDescription="@string/add_city"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_baseline_add_24" />
-
                 <TextView
                     android:id="@+id/cityTextView"
                     android:layout_width="@dimen/zero_size"
                     android:layout_height="wrap_content"
-                    android:layout_weight="9"
+                    android:layout_gravity="center"
+                    android:layout_weight="4"
                     android:gravity="center"
                     android:text="@string/city"
                     android:textSize="@dimen/head"
                     android:textStyle="bold" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/citySelectionFAB"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="@dimen/between_layouts"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:contentDescription="@string/city_selection"
+                    android:focusable="true"
+                    app:srcCompat="@drawable/ic_baseline_location_city_24" />
             </LinearLayout>
 
             <LinearLayout
@@ -254,7 +257,7 @@
                     android:layout_width="@dimen/zero_size" />
 
                 <ImageView
-                    android:id="@+id/imageView7"
+                    android:id="@+id/windImageView"
                     android:layout_width="@dimen/zero_size"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -272,7 +275,7 @@
                     android:textSize="@dimen/head2" />
 
                 <ImageView
-                    android:id="@+id/imageView8"
+                    android:id="@+id/humidityImageView"
                     android:layout_width="@dimen/zero_size"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -290,7 +293,7 @@
                     android:textSize="@dimen/head2" />
 
                 <ImageView
-                    android:id="@+id/imageView9"
+                    android:id="@+id/pressureImageView"
                     android:layout_width="@dimen/zero_size"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -298,6 +301,16 @@
                     app:srcCompat="@drawable/barometer"
                     android:contentDescription="@string/pressure_text"/>
             </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/cityInformationImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_margin="?attr/listPreferredItemPaddingStart"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_baseline_info_24"
+                android:contentDescription="@string/city_information" />
 
         </LinearLayout>
     </ScrollView>

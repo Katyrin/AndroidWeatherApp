@@ -39,4 +39,7 @@
     <string name="three_days_ahead">Три дня</string>
     <string name="five_days_ahead">Пять дней</string>
     <string name="seven_days_ahead">Семь дней</string>
+    <string name="city_selection">Выбор города</string>
+    <string name="city_information">Информация о городе</string>
+    <string name="wiki_url">https://ru.wikipedia.org/wiki/</string>
 </resources>

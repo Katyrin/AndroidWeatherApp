@@ -1,11 +1,19 @@
 package com.katyrin.weatherapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.util.Objects;
 
 public class CitySelectionActivity extends AppCompatActivity {
 
@@ -16,6 +24,9 @@ public class CitySelectionActivity extends AppCompatActivity {
     private static final String pressureDataKey = "pressureDataKey";
     private static final String humidityDataKey = "humidityDataKey";
 
+    private FloatingActionButton saveCitySettingsFAB;
+    private TextInputEditText enterCityEditText;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,6 +35,10 @@ public class CitySelectionActivity extends AppCompatActivity {
         windCheckBox = findViewById(R.id.windCheckBox);
         pressureCheckBox = findViewById(R.id.pressureCheckBox);
         humidityCheckBox = findViewById(R.id.humidityCheckBox);
+
+        enterCityEditText = findViewById(R.id.enterCityEditText);
+        saveCitySettingsFAB = findViewById(R.id.saveCitySettingsFAB);
+        saveCitySettingsFAB.setOnClickListener(onSaveSelection);
     }
 
     @Override
@@ -51,4 +66,23 @@ public class CitySelectionActivity extends AppCompatActivity {
         pressureCheckBox.setChecked(pressureBoolean);
         humidityCheckBox.setChecked(humidityBoolean);
     }
+
+    View.OnClickListener onSaveSelection = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            String cityName = Objects.requireNonNull(enterCityEditText.getText()).toString();
+            if (cityName.equals("")) {
+                Snackbar.make(findViewById(R.id.citySelectionLayout), R.string.enter_city,
+                        Snackbar.LENGTH_LONG).show();
+            } else {
+                Intent intent = new Intent(CitySelectionActivity.this, MainActivity.class);
+                intent.putExtra(MainActivity.cityKey, cityName);
+                intent.putExtra(MainActivity.windKey, windCheckBox.isChecked());
+                intent.putExtra(MainActivity.humidityKey, humidityCheckBox.isChecked());
+                intent.putExtra(MainActivity.pressureKey, pressureCheckBox.isChecked());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+            }
+        }
+    };
 }
