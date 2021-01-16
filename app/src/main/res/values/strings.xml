@@ -38,4 +38,7 @@
     <string name="three_days_ahead">Three days ahead</string>
     <string name="five_days_ahead">Five days ahead</string>
     <string name="seven_days_ahead">Seven days ahead</string>
+    <string name="city_selection">City selection</string>
+    <string name="wiki_url">https://en.wikipedia.org/wiki/</string>
+    <string name="city_information">City information</string>
 </resources>
