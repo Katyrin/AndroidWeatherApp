@@ -1,81 +1,53 @@
 package com.katyrin.weatherapp;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.content.res.Configuration;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.Display;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.katyrin.weatherapp.fragments.MainWeatherFragment;
+import com.katyrin.weatherapp.observer.Publisher;
+import com.katyrin.weatherapp.observer.PublisherGetter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements PublisherGetter {
 
     private final String TAG = "Life cycle: ";
-    private TextView cityTextView;
-    private TextView temperatureTextView;
-    private ImageView weatherImageView;
-    private TextView windTextView;
-    private TextView humidityTextView;
-    private TextView pressureTextView;
-    private ImageView windImageView;
-    private ImageView humidityImageView;
-    private ImageView pressureImageView;
-    private FloatingActionButton citySelectionFAB;
-    private ImageButton cityInformationImageButton;
-
-    private static final String cityDataKey = "cityDataKey";
-    private static final String temperatureDataKey = "temperatureDataKey";
-    private static final String windDataKey = "windDataKey";
-    private static final String humidityDataKey = "humidityDataKey";
-    private static final String pressureDataKey = "pressureDataKey";
-
-    static String cityKey = "cityKey";
-    static String windKey = "windKey";
-    static String humidityKey = "humidityKey";
-    static String pressureKey = "pressureKey";
-    private boolean isShowWind;
-    private boolean isShowHumidity;
-    private boolean isShowPressure;
+    public static boolean isTabletLandscape;
+    private final Publisher publisher = new Publisher();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         Log.d(TAG, "onCreate");
 
-        cityTextView = findViewById(R.id.cityTextView);
-        temperatureTextView = findViewById(R.id.temperatureTextView);
-        weatherImageView = findViewById(R.id.weatherImageView);
-        windTextView = findViewById(R.id.windTextView);
-        humidityTextView = findViewById(R.id.humidityTextView);
-        pressureTextView = findViewById(R.id.pressureTextView);
-        windImageView = findViewById(R.id.windImageView);
-        humidityImageView = findViewById(R.id.humidityImageView);
-        pressureImageView = findViewById(R.id.pressureImageView);
-        cityInformationImageButton = findViewById(R.id.cityInformationImageButton);
+        isTabletLandscape = isTabletLandscape();
 
-        cityInformationImageButton.setOnClickListener(onCityInfoListener);
+        MainWeatherFragment mainWeatherFragment =
+                (MainWeatherFragment) getSupportFragmentManager().findFragmentById(R.id.leftLayout);
+        publisher.subscribe(mainWeatherFragment);
+    }
 
-        citySelectionFAB = findViewById(R.id.citySelectionFAB);
-        citySelectionFAB.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, CitySelectionActivity.class);
-            startActivity(intent);
-                });
+    private boolean isTabletLandscape() {
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x / (int)getResources().getDisplayMetrics().density;
+        int height = size.y / (int)getResources().getDisplayMetrics().density;
+        int orientation = getResources().getConfiguration().orientation;
+        return orientation == Configuration.ORIENTATION_LANDSCAPE &&
+                height > 700 && width > 700;
+    }
 
-        String cityName = getIntent().getStringExtra(cityKey);
-        if (cityName != null){
-            cityTextView.setText(cityName);
-            isShowWind = getIntent().getBooleanExtra(windKey, false);
-            isShowHumidity = getIntent().getBooleanExtra(humidityKey, false);
-            isShowPressure = getIntent().getBooleanExtra(pressureKey, false);
-            showSelectedOptions();
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        int countOfFragmentInManager = getSupportFragmentManager().getBackStackEntryCount();
+        if(countOfFragmentInManager > 0) {
+            getSupportFragmentManager().popBackStack();
         }
     }
 
@@ -116,75 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        String cityTxt = cityTextView.getText().toString();
-        String temperatureTxt = temperatureTextView.getText().toString();
-        String windTxt = windTextView.getText().toString();
-        String humidityTxt = humidityTextView.getText().toString();
-        String pressureTxt = pressureTextView.getText().toString();
-
-        outState.putString(cityDataKey, cityTxt);
-        outState.putString(temperatureDataKey, temperatureTxt);
-        outState.putString(windDataKey, windTxt);
-        outState.putString(humidityDataKey, humidityTxt);
-        outState.putString(pressureDataKey, pressureTxt);
+    public Publisher getPublisher() {
+        return publisher;
     }
-
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        String cityTxt = savedInstanceState.getString(cityDataKey);
-        String temperatureTxt = savedInstanceState.getString(temperatureDataKey);
-        String windTxt = savedInstanceState.getString(windDataKey);
-        String humidityTxt = savedInstanceState.getString(humidityDataKey);
-        String pressureTxt = savedInstanceState.getString(pressureDataKey);
-
-        cityTextView.setText(cityTxt);
-        temperatureTextView.setText(temperatureTxt);
-        windTextView.setText(windTxt);
-        humidityTextView.setText(humidityTxt);
-        pressureTextView.setText(pressureTxt);
-    }
-
-    private void showSelectedOptions() {
-        if (isShowWind) {
-            windImageView.setVisibility(View.VISIBLE);
-            windTextView.setVisibility(View.VISIBLE);
-        } else {
-            windTextView.setVisibility(View.GONE);
-            windImageView.setVisibility(View.GONE);
-        }
-
-        if (isShowHumidity) {
-            humidityImageView.setVisibility(View.VISIBLE);
-            humidityTextView.setVisibility(View.VISIBLE);
-        } else {
-            humidityImageView.setVisibility(View.GONE);
-            humidityTextView.setVisibility(View.GONE);
-        }
-
-        if (isShowPressure) {
-            pressureImageView.setVisibility(View.VISIBLE);
-            pressureTextView.setVisibility(View.VISIBLE);
-        } else {
-            pressureImageView.setVisibility(View.GONE);
-            pressureTextView.setVisibility(View.GONE);
-        }
-    }
-
-    private View.OnClickListener onCityInfoListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            String cityName = cityTextView.getText().toString();
-            if (!cityName.equals("")){
-                String urlStr = getString(R.string.wiki_url) + cityName;
-                Uri uri = Uri.parse(urlStr);
-                Intent webIntent = new Intent(Intent.ACTION_VIEW, uri);
-                startActivity(webIntent);
-            }
-        }
-    };
 }

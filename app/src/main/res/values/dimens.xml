@@ -7,4 +7,5 @@
     <dimen name="elevation">4dp</dimen>
     <dimen name="head">36sp</dimen>
     <dimen name="head2">20sp</dimen>
+    <dimen name="margin">16dp</dimen>
 </resources>

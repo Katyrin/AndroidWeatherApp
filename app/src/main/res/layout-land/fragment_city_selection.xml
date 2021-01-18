@@ -7,14 +7,16 @@
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent">
+    app:layout_constraintTop_toTopOf="parent"
+    android:padding="?attr/listPreferredItemPaddingStart">
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:baselineAligned="false"
-        android:orientation="horizontal"
-        android:padding="?attr/listPreferredItemPaddingStart">
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -22,27 +24,15 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/saveCitySettingsFAB"
-                    android:layout_width="@dimen/zero_size"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/between_layouts"
-                    android:layout_weight="1"
-                    android:clickable="true"
-                    android:contentDescription="@string/enter_city"
-                    android:focusable="true"
-                    app:srcCompat="@drawable/ic_baseline_add_24" />
-
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="@dimen/zero_size"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/between_layouts"
-                    android:layout_weight="4">
+                    android:layout_marginBottom="@dimen/between_layouts">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/enterCityEditText"
@@ -55,12 +45,24 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-            </LinearLayout>
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/saveCitySettingsFAB"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_margin="@dimen/between_layouts"
+                    android:clickable="true"
+                    android:contentDescription="@string/enter_city"
+                    android:focusable="true"
+                    app:srcCompat="@drawable/ic_baseline_add_24" />
+
+            </FrameLayout>
 
             <CheckBox
                 android:id="@+id/windCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:paddingBottom="@dimen/between_layouts"
                 android:text="@string/show_wind_speed"
                 android:textSize="@dimen/head2" />
@@ -69,6 +71,7 @@
                 android:id="@+id/pressureCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:paddingBottom="@dimen/between_layouts"
                 android:text="@string/show_pressure"
                 android:textSize="@dimen/head2" />
@@ -77,6 +80,7 @@
                 android:id="@+id/humidityCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:paddingBottom="@dimen/between_layouts"
                 android:text="@string/show_humidity"
                 android:textSize="@dimen/head2" />

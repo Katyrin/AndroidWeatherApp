@@ -19,8 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CitySelectionActivity"
-            android:windowSoftInputMode="stateHidden"/>
+            android:name=".CitySelectionActivity"/>
         <activity
             android:name=".SettingsActivity" />
     </application>

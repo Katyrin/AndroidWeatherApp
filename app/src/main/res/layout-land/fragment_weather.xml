@@ -1,42 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainLinearLayout"
+<ScrollView android:id="@+id/mainScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    app:layout_constraintBottom_toBottomOf="@id/imageView"
+    app:layout_constraintEnd_toEndOf="@id/imageView"
+    app:layout_constraintStart_toStartOf="@id/imageView"
+    app:layout_constraintTop_toTopOf="@id/imageView"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="?attr/listPreferredItemPaddingEnd">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@string/mountain"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/mountains" />
 
-    <ScrollView
-        android:id="@+id/mainScrollView"
+    <LinearLayout
+        android:id="@+id/scrollLinearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="@id/imageView"
-        app:layout_constraintEnd_toEndOf="@id/imageView"
-        app:layout_constraintStart_toStartOf="@id/imageView"
-        app:layout_constraintTop_toTopOf="@id/imageView">
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:id="@+id/scrollLinearLayout"
+            android:id="@+id/firstLL"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_weight="1"
             android:orientation="vertical"
-            android:padding="?attr/listPreferredItemPaddingStart">
+            android:paddingLeft="@dimen/between_layouts"
+            android:paddingRight="@dimen/between_layouts">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -44,21 +33,10 @@
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/between_layouts">
 
-                <TextView
-                    android:id="@+id/cityTextView"
-                    android:layout_width="@dimen/zero_size"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:layout_weight="4"
-                    android:gravity="center"
-                    android:text="@string/city"
-                    android:textSize="36sp"
-                    android:textStyle="bold" />
-
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/citySelectionFAB"
                     android:layout_width="@dimen/zero_size"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="@dimen/between_layouts"
                     android:layout_weight="1"
@@ -66,6 +44,18 @@
                     android:contentDescription="@string/city_selection"
                     android:focusable="true"
                     app:srcCompat="@drawable/ic_baseline_location_city_24" />
+
+                <TextView
+                    android:id="@+id/cityTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="3"
+                    android:gravity="center"
+                    android:text="@string/city"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -86,7 +76,7 @@
 
                 <ImageView
                     android:id="@+id/weatherImageView"
-                    android:layout_width="0dp"
+                    android:layout_width="@dimen/zero_size"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:contentDescription="@string/weather_image"
@@ -94,11 +84,91 @@
 
             </LinearLayout>
 
-            <TableLayout
+            <TextView
+                android:id="@+id/dayTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/today"
+                android:textSize="@dimen/head" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="@dimen/between_layouts">
+
+                <TextView
+                    android:id="@+id/windTextView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/speed"
+                    android:textSize="@dimen/head2" />
+
+                <ImageView
+                    android:id="@+id/windImageView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/wind"
+                    android:scaleType="fitStart"
+                    app:srcCompat="@drawable/wind" />
+
+                <TextView
+                    android:id="@+id/humidityTextView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/percent"
+                    android:textSize="@dimen/head2" />
+
+                <ImageView
+                    android:id="@+id/humidityImageView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/humidity"
+                    android:scaleType="fitStart"
+                    app:srcCompat="@drawable/rainy" />
+
+                <TextView
+                    android:id="@+id/pressureTextView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/pressure"
+                    android:textSize="@dimen/head2" />
+
+                <ImageView
+                    android:id="@+id/pressureImageView"
+                    android:layout_width="@dimen/zero_size"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/pressure_text"
+                    android:scaleType="fitStart"
+                    app:srcCompat="@drawable/barometer" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/secondLL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:background="@color/background_color"
-                android:elevation="@dimen/elevation">
+                android:gravity="center">
 
                 <TableRow
                     android:layout_width="match_parent"
@@ -233,75 +303,6 @@
                 </TableRow>
             </TableLayout>
 
-            <TextView
-                android:id="@+id/dayTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/today"
-                android:textSize="@dimen/head" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:padding="@dimen/between_layouts">
-
-                <TextView
-                    android:id="@+id/windTextView"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/speed"
-                    android:textSize="@dimen/head2"
-                    android:layout_width="@dimen/zero_size" />
-
-                <ImageView
-                    android:id="@+id/windImageView"
-                    android:layout_width="@dimen/zero_size"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:scaleType="fitStart"
-                    app:srcCompat="@drawable/wind"
-                    android:contentDescription="@string/wind" />
-
-                <TextView
-                    android:id="@+id/humidityTextView"
-                    android:layout_width="@dimen/zero_size"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/percent"
-                    android:textSize="@dimen/head2" />
-
-                <ImageView
-                    android:id="@+id/humidityImageView"
-                    android:layout_width="@dimen/zero_size"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:scaleType="fitStart"
-                    app:srcCompat="@drawable/rainy"
-                    android:contentDescription="@string/humidity"/>
-
-                <TextView
-                    android:id="@+id/pressureTextView"
-                    android:layout_width="@dimen/zero_size"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/pressure"
-                    android:textSize="@dimen/head2" />
-
-                <ImageView
-                    android:id="@+id/pressureImageView"
-                    android:layout_width="@dimen/zero_size"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:scaleType="fitStart"
-                    app:srcCompat="@drawable/barometer"
-                    android:contentDescription="@string/pressure_text"/>
-            </LinearLayout>
-
             <ImageButton
                 android:id="@+id/cityInformationImageButton"
                 android:layout_width="wrap_content"
@@ -309,9 +310,10 @@
                 android:layout_gravity="end"
                 android:layout_margin="?attr/listPreferredItemPaddingStart"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_baseline_info_24"
-                android:contentDescription="@string/city_information" />
+                android:contentDescription="@string/city_information"
+                app:srcCompat="@drawable/ic_baseline_info_24" />
 
         </LinearLayout>
-    </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+</ScrollView>
