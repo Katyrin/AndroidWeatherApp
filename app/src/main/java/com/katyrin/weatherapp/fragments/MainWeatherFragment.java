@@ -1,5 +1,6 @@
 package com.katyrin.weatherapp.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,21 +13,38 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.katyrin.weatherapp.CitySelectionActivity;
 import com.katyrin.weatherapp.CoatContainer;
+import com.katyrin.weatherapp.DataContainer;
+import com.katyrin.weatherapp.DataRVClass;
+import com.katyrin.weatherapp.IRVDaysOnItemClick;
+import com.katyrin.weatherapp.ItemDivider;
 import com.katyrin.weatherapp.MainActivity;
 import com.katyrin.weatherapp.R;
+import com.katyrin.weatherapp.RecyclerDaysAdapter;
 import com.katyrin.weatherapp.observer.Observer;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
 
-public class MainWeatherFragment extends Fragment implements Observer {
+public class MainWeatherFragment extends Fragment implements Observer, IRVDaysOnItemClick {
 
-    private TextView cityTextView;
+    public interface MainWeatherFragmentListener {
+        void onOpenCitySelectionFragment();
+        void onScreenMainWeatherFragment();
+        void onOpenDayForecast(String dayName, String dayTemperature, int drawableId,
+                               String cityName);
+    }
+
+    private static TextView cityTextView;
     private TextView temperatureTextView;
     private TextView windTextView;
     private TextView humidityTextView;
@@ -36,6 +54,9 @@ public class MainWeatherFragment extends Fragment implements Observer {
     private ImageView pressureImageView;
     private FloatingActionButton citySelectionFAB;
     private ImageButton cityInformationImageButton;
+    private RecyclerView daysRV;
+    private RecyclerDaysAdapter adapter;
+    private MainWeatherFragmentListener listener;
 
     private static final String cityDataKey = "cityDataKey";
     private static final String temperatureDataKey = "temperatureDataKey";
@@ -49,19 +70,50 @@ public class MainWeatherFragment extends Fragment implements Observer {
     private boolean isShowWind = true;
     private boolean isShowHumidity = true;
     private boolean isShowPressure = true;
+    private DataContainer dataContainer = DataContainer.getInstance();
+    private static boolean isOnScreen;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         setRetainInstance(true);
+        listener.onScreenMainWeatherFragment();
         return inflater.inflate(R.layout.fragment_weather, container, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        isOnScreen = false;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initViews(view);
+        setupDaysRV();
+        isOnScreen = true;
+        setSettings();
+    }
+
+    private void setSettings() {
+        if (dataContainer.isShowDetails){
+            isShowWind = dataContainer.isShowWind;
+            isShowHumidity = dataContainer.isShowHumidity;
+            isShowPressure = dataContainer.isShowPressure;
+        } else {
+            isShowWind = false;
+            isShowHumidity = false;
+            isShowPressure = false;
+        }
+        showSelectedOptions();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        cityTextView.setText(dataContainer.cityName);
     }
 
     @Override
@@ -71,7 +123,7 @@ public class MainWeatherFragment extends Fragment implements Observer {
     }
 
     private void initViews(View view) {
-        cityTextView = view.findViewById(R.id.cityTextView);
+        cityTextView = view.findViewById(R.id.cityName);
         temperatureTextView = view.findViewById(R.id.temperatureTextView);
         windTextView = view.findViewById(R.id.windTextView);
         humidityTextView = view.findViewById(R.id.humidityTextView);
@@ -81,15 +133,38 @@ public class MainWeatherFragment extends Fragment implements Observer {
         pressureImageView = view.findViewById(R.id.pressureImageView);
         cityInformationImageButton = view.findViewById(R.id.cityInformationImageButton);
         citySelectionFAB = view.findViewById(R.id.citySelectionFAB);
+        daysRV = view.findViewById(R.id.daysRV);
+    }
+
+    private void setupDaysRV() {
+        DataRVClass[] dataRVClass = new DataRVClass[] {
+                new DataRVClass("Monday", getString(R.string.t), R.drawable.cloud1),
+                new DataRVClass("Tuesday", getString(R.string.t), R.drawable.cloudy3),
+                new DataRVClass("Wednesday", getString(R.string.t), R.drawable.rainy),
+                new DataRVClass("Thursday", getString(R.string.t), R.drawable.cloud1),
+                new DataRVClass("Friday", getString(R.string.t), R.drawable.snow),
+                new DataRVClass("Saturday", getString(R.string.t), R.drawable.sun),
+                new DataRVClass("Sunday", getString(R.string.t), R.drawable.weather),
+        };
+        ArrayList<DataRVClass> list = new ArrayList<>(dataRVClass.length);
+        list.addAll(Arrays.asList(dataRVClass).subList(0, dataContainer.daysCount));
+
+        LinearLayoutManager linearLayout = new LinearLayoutManager(requireContext());
+        adapter = new RecyclerDaysAdapter(list, this, requireContext());
+
+        ItemDivider itemDecoration = new ItemDivider(requireActivity().getBaseContext(),
+                LinearLayoutManager.VERTICAL, Objects.requireNonNull(ContextCompat.getDrawable(
+                getActivity().getBaseContext(), R.drawable.decorator_item)));
+
+        daysRV.addItemDecoration(itemDecoration);
+        daysRV.setLayoutManager(linearLayout);
+        daysRV.setAdapter(adapter);
     }
 
     private void setActionsViews() {
         cityInformationImageButton.setOnClickListener(onCityInfoListener);
-        if (MainActivity.isTabletLandscape)
-            citySelectionFAB.setVisibility(View.GONE);
-        else
-            citySelectionFAB.setVisibility(View.VISIBLE);
-        citySelectionFAB.setOnClickListener(v -> showCitySelectionFragment());
+        if (!MainActivity.isTabletLandscape)
+            citySelectionFAB.setOnClickListener(v -> listener.onOpenCitySelectionFragment());
     }
 
     private final View.OnClickListener onCityInfoListener = new View.OnClickListener() {
@@ -148,45 +223,6 @@ public class MainWeatherFragment extends Fragment implements Observer {
             isShowPressure = savedInstanceState.getBoolean(pressureKey);
             showSelectedOptions();
         }
-
-        if (MainActivity.isTabletLandscape) {
-            showCitySelectionFragment();
-        }
-    }
-
-    private void showCitySelectionFragment() {
-        if (MainActivity.isTabletLandscape) {
-            assert getFragmentManager() != null;
-            CitySelectionFragment citySelectionFragment =
-                    (CitySelectionFragment) getFragmentManager().findFragmentById(R.id.rightLLL);
-            if (citySelectionFragment == null) {
-                citySelectionFragment = new CitySelectionFragment();
-
-                Bundle args = new Bundle();
-                args.putSerializable("index", getCoatContainer());
-                citySelectionFragment.setArguments(args);
-
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.rightLLL, citySelectionFragment);
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.addToBackStack("SomeKey");
-                transaction.commit();
-            }
-        } else {
-            Intent intent = new Intent();
-            intent.setClass(getActivity(), CitySelectionActivity.class);
-            intent.putExtra("index", getCoatContainer());
-            startActivityForResult(intent, 1);
-        }
-    }
-
-    private CoatContainer getCoatContainer() {
-        CoatContainer container = new CoatContainer();
-        container.cityName = cityTextView.getText().toString();
-        container.isShowWind = isShowWind;
-        container.isShowHumidity = isShowHumidity;
-        container.isShowPressure = isShowPressure;
-        return container;
     }
 
     private void showSelectedOptions() {
@@ -217,15 +253,10 @@ public class MainWeatherFragment extends Fragment implements Observer {
 
     @Override
     public void updateCityName(String cityName) {
-        cityTextView.setText(cityName);
-    }
-
-    @Override
-    public void updateShowDetails(boolean isWindy, boolean isHumidity, boolean isPressure) {
-        isShowWind = isWindy;
-        isShowHumidity = isHumidity;
-        isShowPressure = isPressure;
-        showSelectedOptions();
+        if (isOnScreen)
+            cityTextView.setText(cityName);
+        else
+            dataContainer.cityName = cityName;
     }
 
     @Override
@@ -236,9 +267,6 @@ public class MainWeatherFragment extends Fragment implements Observer {
                 assert data != null;
                 CoatContainer coatContainer = (CoatContainer) data.getSerializableExtra("returnData");
                 cityTextView.setText(getCityName(coatContainer));
-                isShowWind = getCheckWind(coatContainer);
-                isShowHumidity = getCheckHumidity(coatContainer);
-                isShowPressure = getCheckPressure(coatContainer);
                 showSelectedOptions();
             }
         }
@@ -252,27 +280,20 @@ public class MainWeatherFragment extends Fragment implements Observer {
         }
     }
 
-    private boolean getCheckWind(CoatContainer coatContainer) {
-        try {
-            return coatContainer.isShowWind;
-        } catch (Exception e) {
-            return true;
-        }
+    @Override
+    public void onItemClicked(String dayName, String dayTemperature, int drawableId) {
+        listener.onOpenDayForecast(dayName, dayTemperature, drawableId, dataContainer.cityName);
     }
 
-    private boolean getCheckHumidity(CoatContainer coatContainer) {
-        try {
-            return coatContainer.isShowHumidity;
-        } catch (Exception e) {
-            return true;
-        }
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        listener = (MainWeatherFragmentListener) context;
     }
 
-    private boolean getCheckPressure(CoatContainer coatContainer) {
-        try {
-            return coatContainer.isShowPressure;
-        } catch (Exception e) {
-            return true;
-        }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        listener = null;
     }
 }

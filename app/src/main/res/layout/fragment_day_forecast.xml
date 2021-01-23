@@ -1,55 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView android:id="@+id/mainScrollView"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="?attr/listPreferredItemPaddingStart">
+    android:padding="@dimen/between_layouts">
 
     <LinearLayout
-        android:id="@+id/scrollLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/cityName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingBottom="@dimen/margin"
+            android:text="@string/city"
+            android:textSize="@dimen/head"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/today"
+            android:textSize="@dimen/head"
+            android:paddingBottom="@dimen/margin" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingBottom="@dimen/between_layouts">
 
             <TextView
-                android:id="@+id/cityName"
-                android:layout_width="@dimen/zero_size"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:text="@string/city"
-                android:textSize="@dimen/head"
-                android:textStyle="bold" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/citySelectionFAB"
-                android:layout_width="@dimen/zero_size"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/between_layouts"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:contentDescription="@string/city_selection"
-                android:focusable="true"
-                app:srcCompat="@drawable/ic_baseline_location_city_24" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/between_layouts">
-
-            <TextView
-                android:id="@+id/temperatureTextView"
+                android:id="@+id/dayTemperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -59,34 +47,17 @@
                 android:textSize="@dimen/big_size" />
 
             <ImageView
-                android:id="@+id/weatherImageView"
+                android:id="@+id/dayImageView"
                 android:layout_width="@dimen/zero_size"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:contentDescription="@string/weather_image"
-                app:srcCompat="@drawable/cloud1" />
+                android:contentDescription="@string/weather_image" />
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/daysRV"
-            android:nestedScrollingEnabled="false"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background_color"
-            android:padding="@dimen/between_layouts"/>
-
-        <TextView
-            android:id="@+id/dayTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/today"
-            android:textSize="@dimen/head" />
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="@dimen/between_layouts">
 
@@ -145,15 +116,7 @@
                 app:srcCompat="@drawable/barometer" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/cityInformationImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_margin="?attr/listPreferredItemPaddingStart"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/city_information"
-            app:srcCompat="@drawable/ic_baseline_info_24" />
 
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+
+</ScrollView>

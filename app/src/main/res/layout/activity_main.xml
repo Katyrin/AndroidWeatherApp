@@ -22,14 +22,7 @@
         app:srcCompat="@drawable/mountains" />
 
     <FrameLayout
+        android:id="@+id/mainContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <fragment
-            android:id="@+id/leftLayout"
-            android:name="com.katyrin.weatherapp.fragments.MainWeatherFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-    </FrameLayout>
+        android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

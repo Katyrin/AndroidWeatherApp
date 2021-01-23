@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/citySelectionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -60,121 +61,12 @@
             android:textSize="@dimen/head"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/novosibirskTextView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/citiesRV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/novosibirsk"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/moscowTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/moscow"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/sochiTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/sochi"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/parisTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/paris"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/milanTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/milan"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/omskTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/omsk"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/novgorodTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/novgorod"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/krasnoyarskTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/krasnoyarsk"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/erevanTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/erevan"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/dubaiTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/dubai"
-            android:textSize="@dimen/head2" />
-
-        <TextView
-            android:id="@+id/pekinTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/pekin"
-            android:textSize="@dimen/head2" />
-
-        <CheckBox
-            android:id="@+id/windCheckBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/show_wind_speed"
-            android:textSize="@dimen/head2" />
-
-        <CheckBox
-            android:id="@+id/pressureCheckBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/show_pressure"
-            android:textSize="@dimen/head2" />
-
-        <CheckBox
-            android:id="@+id/humidityCheckBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/show_humidity"
-            android:textSize="@dimen/head2" />
-
+            android:nestedScrollingEnabled="false"
+            tools:targetApi="lollipop" />
 
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

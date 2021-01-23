@@ -18,10 +18,9 @@ public class Publisher {
         observers.remove(observer);
     }
 
-    public void notify(String cityName, boolean isWindy, boolean isHumidity, boolean isPressure) {
+    public void notify(String cityName) {
         for (Observer observer : observers) {
             observer.updateCityName(cityName);
-            observer.updateShowDetails(isWindy, isHumidity, isPressure);
         }
     }
 }

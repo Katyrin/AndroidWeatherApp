@@ -30,7 +30,7 @@
 
             <LinearLayout
                 android:layout_width="@dimen/zero_size"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_weight="1">
 
@@ -45,7 +45,7 @@
                 <RadioGroup
                     android:id="@+id/amountDayRadioGroup"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content">
 
                     <RadioButton
                         android:id="@+id/threeRadioButton"
@@ -65,6 +65,16 @@
                         android:layout_height="wrap_content"
                         android:text="@string/seven_days_ahead" />
                 </RadioGroup>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/showFeelSwitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/between_layouts"
+                    android:checked="false"
+                    android:text="@string/show_temperature_by_feel"
+                    android:textSize="@dimen/head2"
+                    tools:checked="false" />
             </LinearLayout>
 
             <LinearLayout
@@ -93,15 +103,32 @@
                     android:textSize="@dimen/head2"
                     tools:checked="false" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/showFeelSwitch"
+                <CheckBox
+                    android:id="@+id/windCheckBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/between_layouts"
-                    android:checked="false"
-                    android:text="@string/show_temperature_by_feel"
-                    android:textSize="@dimen/head2"
-                    tools:checked="false" />
+                    android:checked="true"
+                    android:paddingBottom="@dimen/between_layouts"
+                    android:text="@string/show_wind_speed"
+                    android:textSize="@dimen/head2" />
+
+                <CheckBox
+                    android:id="@+id/humidityCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:paddingBottom="@dimen/between_layouts"
+                    android:text="@string/show_humidity"
+                    android:textSize="@dimen/head2" />
+
+                <CheckBox
+                    android:id="@+id/pressureCheckBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:paddingBottom="@dimen/between_layouts"
+                    android:text="@string/show_pressure"
+                    android:textSize="@dimen/head2" />
 
 
             </LinearLayout>

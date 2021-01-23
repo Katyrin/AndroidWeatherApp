@@ -42,6 +42,33 @@
             android:textSize="@dimen/head2"
             tools:checked="false" />
 
+        <CheckBox
+            android:id="@+id/windCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingBottom="@dimen/between_layouts"
+            android:text="@string/show_wind_speed"
+            android:textSize="@dimen/head2" />
+
+        <CheckBox
+            android:id="@+id/humidityCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingBottom="@dimen/between_layouts"
+            android:text="@string/show_humidity"
+            android:textSize="@dimen/head2" />
+
+        <CheckBox
+            android:id="@+id/pressureCheckBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:paddingBottom="@dimen/between_layouts"
+            android:text="@string/show_pressure"
+            android:textSize="@dimen/head2" />
+
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/showFeelSwitch"
             android:layout_width="match_parent"
