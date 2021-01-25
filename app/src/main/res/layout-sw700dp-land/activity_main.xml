@@ -38,7 +38,7 @@
 
         <fragment
             android:id="@+id/leftLayout"
-            android:name="com.katyrin.weatherapp.fragments.MainWeatherFragment"
+            android:name="com.katyrin.weatherapp.fragments.CitySelectionFragment"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -46,21 +46,11 @@
             android:layout_marginRight="@dimen/margin" />
 
         <FrameLayout
-            android:id="@+id/rightLayout"
+            android:id="@+id/mainContainer"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginEnd="@dimen/margin"
-            android:layout_marginRight="@dimen/margin">
-
-            <fragment
-                android:id="@+id/rightLLL"
-                android:name="com.katyrin.weatherapp.fragments.CitySelectionFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-            </fragment>
-
-        </FrameLayout>
+            android:layout_marginRight="@dimen/margin"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

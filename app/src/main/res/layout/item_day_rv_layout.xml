@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:id="@+id/dayItemLayout"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/between_layouts">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/between_layouts">
+
+        <TextView
+            android:id="@+id/dayName"
+            android:layout_width="@dimen/zero_size"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="end"
+            android:text="@string/tomorrow"
+            android:textSize="@dimen/thirty_sp"
+            android:lines="1"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/dayTemperature"
+            android:layout_width="@dimen/zero_size"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/t"
+            android:textSize="@dimen/thirty_sp" />
+
+        <ImageView
+            android:id="@+id/dayImageView"
+            android:layout_width="@dimen/zero_size"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:contentDescription="@string/weather_image"
+            android:scaleType="fitStart" />
+    </LinearLayout>
+
+</FrameLayout>
