@@ -42,4 +42,12 @@
     <string name="city_selection">City selection</string>
     <string name="city_information">City information</string>
     <string name="wiki_url">https://en.wikipedia.org/wiki/</string>
+    <string name="enter_city_name">Enter the name of the city</string>
+    <string name="show_forecast">Show forecast</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="confirmation_cancel">Cancel selected settings?</string>
+    <string name="confirmation_save">Save selected settings?</string>
+    <string name="forecast">Forecast</string>
+    <string name="about_us">About us</string>
 </resources>

@@ -1,65 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/citySelectionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    android:padding="?attr/listPreferredItemPaddingStart">
+    android:theme="@style/MyTheme.SimpleTextSize">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        style="@style/FragmentPadding">
 
-        <FrameLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/enterCityInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            app:errorEnabled="true">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/enterCityEditText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/between_layouts">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/enter_city"
+                android:inputType="textCapWords"
+                android:singleLine="true"
+                android:imeOptions="actionDone"/>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/enterCityEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:hint="@string/enter_city"
-                    android:inputType="textCapWords"
-                    android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/saveCitySettingsFAB"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:layout_margin="@dimen/between_layouts"
-                android:clickable="true"
-                android:contentDescription="@string/enter_city"
-                android:focusable="true"
-                app:srcCompat="@drawable/ic_baseline_add_24" />
-
-        </FrameLayout>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/showForecastButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/show_forecast" />
 
         <TextView
             android:id="@+id/popularCitiesTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingBottom="@dimen/between_layouts"
             android:text="@string/popular_cities"
-            android:textColor="@android:color/holo_orange_dark"
-            android:textSize="@dimen/head"
-            android:textStyle="bold" />
+            style="@style/MyTheme.HeadStyle.Bold.Orange"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/citiesRV"

@@ -8,6 +8,9 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,7 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.katyrin.weatherapp.DataContainer;
@@ -36,9 +39,9 @@ public class CitySelectionFragment extends Fragment implements IRVCitiesOnItemCl
 
     private RecyclerView citiesRV;
     private RecyclerCitiesAdapter adapter;
-
-    private FloatingActionButton saveCitySettingsFAB;
+    private MaterialButton showForecastButton;
     private TextInputEditText enterCityEditText;
+
     public static Publisher publisher;
     private CitySelectionFragmentListener listener;
     private DataContainer dataContainer = DataContainer.getInstance();
@@ -63,7 +66,7 @@ public class CitySelectionFragment extends Fragment implements IRVCitiesOnItemCl
     private void initViews(View view) {
         citiesRV = view.findViewById(R.id.citiesRV);
         enterCityEditText = view.findViewById(R.id.enterCityEditText);
-        saveCitySettingsFAB = view.findViewById(R.id.saveCitySettingsFAB);
+        showForecastButton = view.findViewById(R.id.showForecastButton);
     }
 
     private void setupRV() {
@@ -80,7 +83,34 @@ public class CitySelectionFragment extends Fragment implements IRVCitiesOnItemCl
     }
 
     private void setAction() {
-        saveCitySettingsFAB.setOnClickListener(onSaveSelection);
+        showForecastButton.setOnClickListener(onSaveSelection);
+        enterCityEditText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                TextView tv = (TextView) v;
+                validate(tv, getString(R.string.enter_city_name));
+            }
+        });
+
+        InputMethodManager inputManager =
+                (InputMethodManager) requireContext().
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        enterCityEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                inputManager.hideSoftInputFromWindow(
+                        requireActivity().getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+                enterCityEditText.clearFocus();
+            }
+            return true;
+        });
+    }
+
+    private void validate(TextView tv, String message) {
+        if (tv.getText().toString().equals(""))
+            tv.setError(message);
+        else
+            tv.setError(null);
     }
 
 
@@ -90,8 +120,8 @@ public class CitySelectionFragment extends Fragment implements IRVCitiesOnItemCl
         public void onClick(View v) {
             String cityName = Objects.requireNonNull(enterCityEditText.getText()).toString();
             if (cityName.equals("")) {
-                Snackbar.make(requireActivity().findViewById(R.id.citySelectionLayout), R.string.enter_city,
-                        Snackbar.LENGTH_LONG).show();
+                Snackbar.make(requireActivity().findViewById(R.id.mainLayout), R.string.enter_city,
+                        Snackbar.LENGTH_LONG).setAnchorView(R.id.nav_view).show();
             } else {
                 setCityName(cityName);
             }

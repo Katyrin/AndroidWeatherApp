@@ -11,11 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cityNameTextView"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
-        android:lines="1"
         android:ellipsize="end"
-        tools:text="Item text"
-        android:padding="@dimen/between_layouts"/>
+        tools:text="Item text"/>
 
 </FrameLayout>

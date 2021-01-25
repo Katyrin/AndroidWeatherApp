@@ -2,113 +2,122 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settingsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="?attr/listPreferredItemPaddingStart">
+    android:theme="@style/MyTheme.SimpleTextSize.Background">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        style="@style/FragmentPadding" >
 
         <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/between_layouts"
-            android:gravity="center"
             android:text="@string/settings"
-            android:textColor="@android:color/holo_orange_dark"
-            android:textSize="@dimen/thirty_sp"
-            android:textStyle="bold" />
+            style="@style/MyTheme.HeadStyle.Bold.Orange"/>
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/darkLightSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/between_layouts"
             android:checked="false"
             android:text="@string/switch_dark_theme"
-            android:textSize="@dimen/head2"
             tools:checked="false" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/showDetailsSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/between_layouts"
             android:checked="false"
             android:text="@string/show_details"
-            android:textSize="@dimen/head2"
             tools:checked="false" />
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/windCheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/show_wind_speed"
-            android:textSize="@dimen/head2" />
+            android:text="@string/show_wind_speed" />
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/humidityCheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/show_humidity"
-            android:textSize="@dimen/head2" />
+            android:text="@string/show_humidity" />
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/pressureCheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:paddingBottom="@dimen/between_layouts"
-            android:text="@string/show_pressure"
-            android:textSize="@dimen/head2" />
+            android:text="@string/show_pressure" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/showFeelSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/between_layouts"
             android:checked="false"
             android:text="@string/show_temperature_by_feel"
-            android:textSize="@dimen/head2"
             tools:checked="false" />
 
         <TextView
             android:id="@+id/showDaysTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/show_number_of_days_ahead"
-            android:textSize="@dimen/head2" />
+            android:text="@string/show_number_of_days_ahead" />
 
         <RadioGroup
             android:id="@+id/amountDayRadioGroup"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <RadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/threeRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:text="@string/three_days_ahead" />
 
-            <RadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/fiveRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/five_days_ahead" />
 
-            <RadioButton
+            <com.google.android.material.radiobutton.MaterialRadioButton
                 android:id="@+id/sevenRadioButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/seven_days_ahead" />
+                android:text="@string/seven_days_ahead"
+                android:checked="true"/>
         </RadioGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancelButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin"
+                android:layout_marginRight="@dimen/margin"
+                android:text="@string/cancel" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/save" />
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>

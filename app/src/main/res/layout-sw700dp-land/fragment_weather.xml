@@ -1,62 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView android:id="@+id/mainScrollView"
+<androidx.core.widget.NestedScrollView
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="?attr/listPreferredItemPaddingStart">
+    android:theme="@style/MyTheme.SimpleTextSize">
 
     <LinearLayout
         android:id="@+id/scrollLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        style="@style/FragmentPadding">
+
+        <TextView
+            android:id="@+id/cityName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/city"
+            style="@style/MyTheme.HeadStyle.Bold"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/between_layouts">
-
-            <TextView
-                android:id="@+id/cityName"
-                android:layout_width="@dimen/zero_size"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:text="@string/city"
-                android:textSize="@dimen/head"
-                android:textStyle="bold" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/citySelectionFAB"
-                android:layout_width="@dimen/zero_size"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/between_layouts"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:contentDescription="@string/city_selection"
-                android:focusable="true"
-                app:srcCompat="@drawable/ic_baseline_location_city_24" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="@dimen/between_layouts">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/temperatureTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
                 android:text="@string/t"
-                android:textColor="?android:attr/colorActivatedHighlight"
-                android:textSize="@dimen/big_size" />
+                style="@style/ForecastStyle"/>
 
             <ImageView
                 android:id="@+id/weatherImageView"
@@ -74,21 +51,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/background_color"
-            android:padding="@dimen/between_layouts"/>
+            tools:targetApi="lollipop" />
 
         <TextView
             android:id="@+id/dayTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:text="@string/today"
-            android:textSize="@dimen/head" />
+            style="@style/MyTheme.HeadStyle.Bold.Orange"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:padding="@dimen/between_layouts">
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/windTextView"
@@ -96,8 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/speed"
-                android:textSize="@dimen/head2" />
+                android:text="@string/speed" />
 
             <ImageView
                 android:id="@+id/windImageView"
@@ -114,8 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/percent"
-                android:textSize="@dimen/head2" />
+                android:text="@string/percent" />
 
             <ImageView
                 android:id="@+id/humidityImageView"
@@ -132,8 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/pressure"
-                android:textSize="@dimen/head2" />
+                android:text="@string/pressure" />
 
             <ImageView
                 android:id="@+id/pressureImageView"

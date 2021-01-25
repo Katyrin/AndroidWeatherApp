@@ -10,9 +10,13 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.katyrin.weatherapp.fragments.AboutUsFragment;
 import com.katyrin.weatherapp.fragments.CitySelectionFragment;
 import com.katyrin.weatherapp.fragments.DayForecastFragment;
 import com.katyrin.weatherapp.fragments.MainWeatherFragment;
@@ -31,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
 
     private CitySelectionFragment citySelectionFragment;
     private Fragment fragment;
+    private FloatingActionButton citySelectionFAB;
+    private BottomNavigationView navView;
     private SaveCastFragment castFragment = SaveCastFragment.getInstance();
     private DataContainer dataContainer = DataContainer.getInstance();
 
@@ -38,13 +44,15 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         Log.d(TAG, "onCreate");
 
         isTabletLandscape = isTabletLandscape();
 
         if (savedInstanceState == null) {
             firstSetDataContainer();
-            onOpenMainWeatherFragment();
+            onOpenMainWeatherFragment(false);
         } else {
             fragment = castFragment.fragment;
         }
@@ -59,6 +67,26 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
             fragment = castFragment.fragment;
         }
 
+        citySelectionFAB = findViewById(R.id.citySelectionFAB);
+        if (!MainActivity.isTabletLandscape)
+            citySelectionFAB.setOnClickListener(v -> onOpenCitySelectionFragment());
+
+        navView = findViewById(R.id.nav_view);
+        navView.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.navigation_forecast:
+                    onOpenMainWeatherFragment(true);
+                    return true;
+                case R.id.navigation_settings:
+                    openSettingsFragment();
+                    return true;
+                case R.id.navigation_about_us:
+                    openAboutUsFragment();
+                    return true;
+            }
+            return false;
+        });
+
         castFragment.fragment = fragment;
     }
 
@@ -70,17 +98,65 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
         dataContainer.isShowHumidity = true;
         dataContainer.isShowPressure = true;
         dataContainer.daysCount = 7;
+        switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
+            case Configuration.UI_MODE_NIGHT_YES:
+                dataContainer.isDarkLightCheck = true;
+                break;
+            case Configuration.UI_MODE_NIGHT_NO:
+                dataContainer.isDarkLightCheck = false;
+                break;
+        }
     }
 
-    private void onOpenMainWeatherFragment() {
+    private void onOpenMainWeatherFragment(boolean isAddToBackStack) {
         if (fragment == null || !(fragment instanceof MainWeatherFragment)) {
             fragment = new MainWeatherFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.mainContainer, fragment);
+            if (isAddToBackStack)
+                transaction.addToBackStack(null);
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             transaction.commit();
         } else {
             fragment = (MainWeatherFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.mainContainer);
+        }
+    }
+
+    private void openSettingsFragment() {
+        if (fragment == null || !(fragment instanceof SettingsFragment)) {
+            fragment = new SettingsFragment();
+
+            Bundle args = new Bundle();
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.mainContainer, fragment);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            castFragment.fragment = fragment;
+        } else {
+            fragment = (SettingsFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.mainContainer);
+        }
+    }
+
+    private void openAboutUsFragment() {
+        if (fragment == null || !(fragment instanceof AboutUsFragment)) {
+            fragment = new AboutUsFragment();
+
+            Bundle args = new Bundle();
+            fragment.setArguments(args);
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.mainContainer, fragment);
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            castFragment.fragment = fragment;
+        } else {
+            fragment = (SettingsFragment)
                     getSupportFragmentManager().findFragmentById(R.id.mainContainer);
         }
     }
@@ -95,17 +171,7 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
-                fragment = new SettingsFragment();
-
-                Bundle args = new Bundle();
-                fragment.setArguments(args);
-
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.mainContainer, fragment);
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.addToBackStack(null);
-                transaction.commit();
-                castFragment.fragment = fragment;
+                openSettingsFragment();
                 return true;
             default:
                 return false;
@@ -121,15 +187,6 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
         int orientation = getResources().getConfiguration().orientation;
         return orientation == Configuration.ORIENTATION_LANDSCAPE &&
                 height > 700 && width > 700;
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        int countOfFragmentInManager = getSupportFragmentManager().getBackStackEntryCount();
-        if(countOfFragmentInManager > 0) {
-            getSupportFragmentManager().popBackStack();
-        }
     }
 
     @Override

@@ -12,5 +12,54 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.WeatherApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.WeatherApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="FragmentPadding">
+        <item name="android:padding">@dimen/margin</item>
+    </style>
+
+    <style name="MarginTablet">
+        <item name="android:layout_marginStart">@dimen/margin</item>
+        <item name="android:layout_marginLeft">@dimen/margin</item>
+        <item name="android:layout_marginEnd">@dimen/margin</item>
+        <item name="android:layout_marginRight">@dimen/margin</item>
+    </style>
+
+    <style name="MyTheme">
+        <item name="android:layout_marginBottom">@dimen/between_layouts</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="MyTheme.SimpleTextSize" parent="MyTheme">
+        <item name="android:textSize">@dimen/head2</item>
+    </style>
+
+    <style name="MyTheme.SimpleTextSize.Background" parent="MyTheme.SimpleTextSize">
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="MyTheme.HeadStyle" parent="MyTheme">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/head</item>
+    </style>
+
+    <style name="MyTheme.HeadStyle.Bold" parent="MyTheme.HeadStyle">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="MyTheme.HeadStyle.Bold.Orange" parent="MyTheme.HeadStyle.Bold">
+        <item name="android:textColor">?android:attr/colorActivatedHighlight</item>
+    </style>
+
+    <style name="ForecastStyle">
+        <item name="android:textColor">?android:attr/colorActivatedHighlight</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/big_size</item>
     </style>
 </resources>
