@@ -42,4 +42,12 @@
     <string name="city_selection">Выбор города</string>
     <string name="city_information">Информация о городе</string>
     <string name="wiki_url">https://ru.wikipedia.org/wiki/</string>
+    <string name="enter_city_name">Введите название города</string>
+    <string name="show_forecast">Показать прогноз</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="confirmation_cancel">Отменить выбранные настройки?</string>
+    <string name="confirmation_save">Сохранить выбранные настройки?</string>
+    <string name="forecast">Прогноз</string>
+    <string name="about_us">О нас</string>
 </resources>

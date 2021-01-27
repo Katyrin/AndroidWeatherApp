@@ -163,8 +163,6 @@ public class MainWeatherFragment extends Fragment implements Observer, IRVDaysOn
 
     private void setActionsViews() {
         cityInformationImageButton.setOnClickListener(onCityInfoListener);
-        if (!MainActivity.isTabletLandscape)
-            citySelectionFAB.setOnClickListener(v -> listener.onOpenCitySelectionFragment());
     }
 
     private final View.OnClickListener onCityInfoListener = new View.OnClickListener() {

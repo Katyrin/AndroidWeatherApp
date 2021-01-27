@@ -5,14 +5,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.radiobutton.MaterialRadioButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.katyrin.weatherapp.DataContainer;
 import com.katyrin.weatherapp.R;
@@ -24,12 +26,15 @@ public class SettingsFragment extends Fragment {
     }
 
     private SwitchMaterial showDetailsSwitch;
-    private CheckBox windCheckBox;
-    private CheckBox humidityCheckBox;
-    private CheckBox pressureCheckBox;
-    private RadioButton threeRadioButton;
-    private RadioButton fiveRadioButton;
-    private RadioButton sevenRadioButton;
+    private MaterialCheckBox windCheckBox;
+    private MaterialCheckBox humidityCheckBox;
+    private MaterialCheckBox pressureCheckBox;
+    private MaterialRadioButton threeRadioButton;
+    private MaterialRadioButton fiveRadioButton;
+    private MaterialRadioButton sevenRadioButton;
+    private MaterialButton cancelButton;
+    private MaterialButton saveButton;
+    private SwitchMaterial darkLightSwitch;
 
     private SettingsFragmentListener listener;
     private DataContainer dataContainer = DataContainer.getInstance();
@@ -61,6 +66,9 @@ public class SettingsFragment extends Fragment {
         threeRadioButton = view.findViewById(R.id.threeRadioButton);
         fiveRadioButton = view.findViewById(R.id.fiveRadioButton);
         sevenRadioButton = view.findViewById(R.id.sevenRadioButton);
+        cancelButton = view.findViewById(R.id.cancelButton);
+        saveButton = view.findViewById(R.id.saveButton);
+        darkLightSwitch = view.findViewById(R.id.darkLightSwitch);
     }
 
     private void setDataContainer() {
@@ -78,15 +86,41 @@ public class SettingsFragment extends Fragment {
             case 7:
                 sevenRadioButton.setChecked(true);
         }
+        darkLightSwitch.setChecked(dataContainer.isDarkLightCheck);
     }
 
     private void setAction() {
-        showDetailsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                setViewVisibility(isChecked);
-            }
-        });
+        showDetailsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> setViewVisibility(isChecked));
+
+        cancelButton.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+
+        saveButton.setOnClickListener(v ->
+                Snackbar.make(requireActivity().findViewById(R.id.settingsLayout), R.string.confirmation_save,
+                Snackbar.LENGTH_LONG).setAction( android.R.string.ok, v1 -> {
+                    requireActivity().getSupportFragmentManager().popBackStack();
+
+                    dataContainer.isShowDetails = showDetailsSwitch.isChecked();
+                    dataContainer.isShowWind = windCheckBox.isChecked();
+                    dataContainer.isShowHumidity = humidityCheckBox.isChecked();
+                    dataContainer.isShowPressure = pressureCheckBox.isChecked();
+                    if (threeRadioButton.isChecked()){
+                        dataContainer.daysCount = 3;
+                    } else if (fiveRadioButton.isChecked()){
+                        dataContainer.daysCount = 5;
+                    } else if (sevenRadioButton.isChecked()){
+                        dataContainer.daysCount = 7;
+                    }
+                    dataContainer.isDarkLightCheck = darkLightSwitch.isChecked();
+                    setTheme(darkLightSwitch.isChecked());
+                    requireActivity().recreate();
+                }).setAnchorView(R.id.nav_view).show());
+    }
+
+    private void setTheme(boolean isChecked) {
+        if (isChecked)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        else
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 
     private void setViewVisibility(boolean isChecked) {
@@ -98,22 +132,6 @@ public class SettingsFragment extends Fragment {
             windCheckBox.setVisibility(View.GONE);
             humidityCheckBox.setVisibility(View.GONE);
             pressureCheckBox.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        dataContainer.isShowDetails = showDetailsSwitch.isChecked();
-        dataContainer.isShowWind = windCheckBox.isChecked();
-        dataContainer.isShowHumidity = humidityCheckBox.isChecked();
-        dataContainer.isShowPressure = pressureCheckBox.isChecked();
-        if (threeRadioButton.isChecked()){
-            dataContainer.daysCount = 3;
-        } else if (fiveRadioButton.isChecked()){
-            dataContainer.daysCount = 5;
-        } else if (sevenRadioButton.isChecked()){
-            dataContainer.daysCount = 7;
         }
     }
 

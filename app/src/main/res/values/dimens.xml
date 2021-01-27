@@ -3,7 +3,6 @@
     <dimen name="big_size">100sp</dimen>
     <dimen name="between_layouts">8dp</dimen>
     <dimen name="zero_size">0dp</dimen>
-    <dimen name="thirty_sp">30sp</dimen>
     <dimen name="elevation">4dp</dimen>
     <dimen name="head">36sp</dimen>
     <dimen name="head2">20sp</dimen>
