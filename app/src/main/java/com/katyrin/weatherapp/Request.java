@@ -29,7 +29,7 @@ public class Request {
     private RequestListener listener;
 
     public static final String TAG = "WEATHER";
-    public static final String WEATHER_API_KEY = "&appid=394ceb4f7fff4ed7530fbcbb2c088701";
+    public static final String WEATHER_API_KEY = BuildConfig.WEATHER_API_KEY;
 
     public Request(String cityName, Context context) {
         this.context = context;
