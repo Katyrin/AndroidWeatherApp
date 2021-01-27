@@ -37,7 +37,7 @@ public class SettingsFragment extends Fragment {
     private SwitchMaterial darkLightSwitch;
 
     private SettingsFragmentListener listener;
-    private DataContainer dataContainer = DataContainer.getInstance();
+    private final DataContainer dataContainer = DataContainer.getInstance();
 
     @Nullable
     @Override

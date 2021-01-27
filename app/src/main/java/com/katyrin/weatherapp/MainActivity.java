@@ -1,35 +1,48 @@
 package com.katyrin.weatherapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.katyrin.weatherapp.fragments.AboutUsFragment;
 import com.katyrin.weatherapp.fragments.CitySelectionFragment;
 import com.katyrin.weatherapp.fragments.DayForecastFragment;
 import com.katyrin.weatherapp.fragments.MainWeatherFragment;
 import com.katyrin.weatherapp.fragments.SaveCastFragment;
 import com.katyrin.weatherapp.fragments.SettingsFragment;
+import com.katyrin.weatherapp.model.WeatherRequest;
 import com.katyrin.weatherapp.observer.Publisher;
 import com.katyrin.weatherapp.observer.PublisherGetter;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity implements PublisherGetter,
         MainWeatherFragment.MainWeatherFragmentListener, CitySelectionFragment.CitySelectionFragmentListener,
-        SettingsFragment.SettingsFragmentListener, DayForecastFragment.DayForecastFragmentListener {
+        SettingsFragment.SettingsFragmentListener, DayForecastFragment.DayForecastFragmentListener,
+        Request.RequestListener {
 
-    private final String TAG = "Life cycle: ";
     public static boolean isTabletLandscape;
     private final Publisher publisher = new Publisher();
 
@@ -37,8 +50,8 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     private Fragment fragment;
     private FloatingActionButton citySelectionFAB;
     private BottomNavigationView navView;
-    private SaveCastFragment castFragment = SaveCastFragment.getInstance();
-    private DataContainer dataContainer = DataContainer.getInstance();
+    private final SaveCastFragment castFragment = SaveCastFragment.getInstance();
+    private final DataContainer dataContainer = DataContainer.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +59,16 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Log.d(TAG, "onCreate");
 
         isTabletLandscape = isTabletLandscape();
 
         if (savedInstanceState == null) {
             firstSetDataContainer();
             onOpenMainWeatherFragment(false);
+            if (isNetworkAvailable())
+                new Request("Novosibirsk", this);
+            else
+                Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_LONG).show();
         } else {
             fragment = castFragment.fragment;
         }
@@ -74,13 +90,13 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
         navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.navigation_forecast:
+                case (R.id.navigation_forecast):
                     onOpenMainWeatherFragment(true);
                     return true;
-                case R.id.navigation_settings:
+                case (R.id.navigation_settings):
                     openSettingsFragment();
                     return true;
-                case R.id.navigation_about_us:
+                case (R.id.navigation_about_us):
                     openAboutUsFragment();
                     return true;
             }
@@ -91,7 +107,6 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     }
 
     private void firstSetDataContainer() {
-        dataContainer.cityName = "City";
         dataContainer.dayName = "Monday";
         dataContainer.isShowDetails = true;
         dataContainer.isShowWind = true;
@@ -112,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
         if (fragment == null || !(fragment instanceof MainWeatherFragment)) {
             fragment = new MainWeatherFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.mainContainer, fragment);
+            transaction.replace(R.id.mainContainer, fragment, "MainWeatherFragment");
             if (isAddToBackStack)
                 transaction.addToBackStack(null);
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -156,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
             transaction.commit();
             castFragment.fragment = fragment;
         } else {
-            fragment = (SettingsFragment)
+            fragment = (AboutUsFragment)
                     getSupportFragmentManager().findFragmentById(R.id.mainContainer);
         }
     }
@@ -170,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.settings:
+            case (R.id.settings):
                 openSettingsFragment();
                 return true;
             default:
@@ -190,41 +205,10 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause");
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
-        Log.d(TAG, "onStop");
         if (isTabletLandscape)
             CitySelectionFragment.publisher = null;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.d(TAG, "onRestart");
     }
 
     @Override
@@ -267,13 +251,22 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     }
 
     @Override
+    public void showForecast(String cityName) {
+        if (isNetworkAvailable())
+            new Request(cityName, this);
+        else
+            Snackbar.make(findViewById(R.id.mainLayout), getString(R.string.no_internet),
+                    Snackbar.LENGTH_LONG).setAnchorView(R.id.nav_view).show();
+    }
+
+    @Override
     public void onScreenSettingsFragment() {
         fragment = new SettingsFragment();
     }
 
     @Override
     public void onOpenDayForecast(String dayName, String dayTemperature, int drawableId,
-                                  String cityName) {
+                                  String cityName, String wind, String humidity, String pressure) {
         fragment = new DayForecastFragment();
 
         Bundle args = new Bundle();
@@ -281,6 +274,9 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
         args.putString("dayTemperature", dayTemperature);
         args.putInt("drawableId", drawableId);
         args.putString("cityName", cityName);
+        args.putString("wind", wind);
+        args.putString("humidity", humidity);
+        args.putString("pressure", pressure);
         fragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -294,5 +290,91 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     @Override
     public void onScreenDayForecastFragment() {
         fragment = new DayForecastFragment();
+    }
+
+    @Override
+    public void requestListenerCallBack(int i, Handler handler, WeatherRequest weatherRequest) {
+        handler.post(() -> {
+            if (i != 1) {
+                displayWatcherRV(weatherRequest);
+            } else {
+                displayWeather(weatherRequest);
+            }
+        });
+    }
+
+    private void displayWeather(WeatherRequest weatherRequest) {
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setMaximumFractionDigits(1);
+
+        String cityName = weatherRequest.getName();
+        String currentTemperature = numberFormat.format(weatherRequest.getMain().getTemp())
+                + getString(R.string.t);
+        String currentPressure = numberFormat.format(weatherRequest.getMain().getPressure())
+                + getString(R.string.pressure);
+        String currentHumidity = numberFormat.format(weatherRequest.getMain().getHumidity())
+                + getString(R.string.percent);
+        String currentWind = numberFormat.format(weatherRequest.getWind().getSpeed())
+                + getString(R.string.speed);
+        String currentIcon = weatherRequest.getWeather()[0].getIcon();
+
+        dataContainer.cityName = cityName;
+        dataContainer.currentTemperature = currentTemperature;
+        dataContainer.currentPressure = currentPressure;
+        dataContainer.currentHumidity = currentHumidity;
+        dataContainer.currentWind = currentWind;
+        dataContainer.currentIcon = currentIcon;
+        dataContainer.dt = convertTimeStampToDay(weatherRequest.getDt());
+        new Request(weatherRequest.getCoord().getLat(), weatherRequest.getCoord().getLon(), this);
+    }
+
+
+
+    private void displayWatcherRV(WeatherRequest weatherRequest) {
+        NumberFormat numberFormat = NumberFormat.getInstance();
+        numberFormat.setMaximumFractionDigits(1);
+
+        DataRVClass[] dataRVClasses = new DataRVClass[weatherRequest.getDaily().length];
+
+        for (int i = 0; i < weatherRequest.getDaily().length; i++) {
+            dataRVClasses[i] = new DataRVClass(
+                    convertTimeStampToDay(weatherRequest.getDaily()[i].getDt()),
+                    numberFormat.format(weatherRequest.getDaily()[i].getTemp().getDay())
+                            + getString(R.string.t),
+                    weatherRequest.getDaily()[i].getWeather()[0].getIcon(),
+                    numberFormat.format(weatherRequest.getDaily()[i].getWind_speed())
+                            + getString(R.string.speed),
+                    numberFormat.format(weatherRequest.getDaily()[i].getHumidity())
+                            + getString(R.string.percent),
+                    numberFormat.format(weatherRequest.getDaily()[i].getPressure())
+                            + getString(R.string.pressure)
+            );
+        }
+
+        dataContainer.dataRVClasses = dataRVClasses;
+
+        Fragment currentFragment = getSupportFragmentManager().findFragmentByTag("MainWeatherFragment");
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.detach(currentFragment);
+        fragmentTransaction.attach(currentFragment);
+        fragmentTransaction.commit();
+    }
+
+    private String convertTimeStampToDay(long timeStamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timeStamp * 1000);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
+        String result = dateFormat.format(calendar.getTime());
+        StringBuilder sb = new StringBuilder(result);
+        sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
+        return sb.toString();
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

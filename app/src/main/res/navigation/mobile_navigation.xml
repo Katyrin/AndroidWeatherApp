@@ -9,7 +9,17 @@
         android:id="@+id/navigation_forecast"
         android:name="com.katyrin.weatherapp.fragments.MainWeatherFragment"
         android:label="@string/forecast"
-        tools:layout="@layout/fragment_weather" />
+        tools:layout="@layout/fragment_weather" >
+        <action
+            android:id="@+id/action_navigation_forecast_to_navigation_day"
+            app:destination="@id/navigation_day" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_day"
+        android:name="com.katyrin.weatherapp.fragments.DayForecastFragment"
+        android:label="@string/next_day"
+        tools:layout="@layout/fragment_day_forecast" />
 
     <fragment
         android:id="@+id/navigation_settings"

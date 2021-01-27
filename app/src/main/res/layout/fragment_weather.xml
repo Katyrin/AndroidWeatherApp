@@ -22,6 +22,13 @@
             android:text="@string/city"
             style="@style/MyTheme.HeadStyle.Bold"/>
 
+        <TextView
+            android:id="@+id/dayTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/today"
+            style="@style/MyTheme.HeadStyle.Bold.Orange"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -29,7 +36,7 @@
 
             <TextView
                 android:id="@+id/temperatureTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/zero_size"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/t"
@@ -44,21 +51,6 @@
                 app:srcCompat="@drawable/cloud1" />
 
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/daysRV"
-            android:nestedScrollingEnabled="false"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/background_color"
-            tools:targetApi="lollipop" />
-
-        <TextView
-            android:id="@+id/dayTextView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/today"
-            style="@style/MyTheme.HeadStyle.Bold.Orange"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -116,6 +108,14 @@
                 android:scaleType="fitStart"
                 app:srcCompat="@drawable/barometer" />
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/daysRV"
+            android:nestedScrollingEnabled="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/background_color"
+            tools:targetApi="lollipop" />
 
         <ImageButton
             android:id="@+id/cityInformationImageButton"

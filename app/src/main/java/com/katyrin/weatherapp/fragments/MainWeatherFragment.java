@@ -13,24 +13,24 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.collection.ArrayMap;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.katyrin.weatherapp.CoatContainer;
 import com.katyrin.weatherapp.DataContainer;
 import com.katyrin.weatherapp.DataRVClass;
 import com.katyrin.weatherapp.IRVDaysOnItemClick;
 import com.katyrin.weatherapp.ItemDivider;
-import com.katyrin.weatherapp.MainActivity;
 import com.katyrin.weatherapp.R;
 import com.katyrin.weatherapp.RecyclerDaysAdapter;
 import com.katyrin.weatherapp.observer.Observer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
@@ -41,7 +41,7 @@ public class MainWeatherFragment extends Fragment implements Observer, IRVDaysOn
         void onOpenCitySelectionFragment();
         void onScreenMainWeatherFragment();
         void onOpenDayForecast(String dayName, String dayTemperature, int drawableId,
-                               String cityName);
+                               String cityName, String wind, String humidity, String pressure);
     }
 
     private static TextView cityTextView;
@@ -52,8 +52,10 @@ public class MainWeatherFragment extends Fragment implements Observer, IRVDaysOn
     private ImageView windImageView;
     private ImageView humidityImageView;
     private ImageView pressureImageView;
-    private FloatingActionButton citySelectionFAB;
     private ImageButton cityInformationImageButton;
+    private ImageView weatherImageView;
+    private TextView dayTextView;
+
     private RecyclerView daysRV;
     private RecyclerDaysAdapter adapter;
     private MainWeatherFragmentListener listener;
@@ -70,8 +72,10 @@ public class MainWeatherFragment extends Fragment implements Observer, IRVDaysOn
     private boolean isShowWind = true;
     private boolean isShowHumidity = true;
     private boolean isShowPressure = true;
-    private DataContainer dataContainer = DataContainer.getInstance();
+    private final DataContainer dataContainer = DataContainer.getInstance();
     private static boolean isOnScreen;
+
+    public static Map<String,Integer> icons = new ArrayMap<>();
 
     @Nullable
     @Override
@@ -91,10 +95,32 @@ public class MainWeatherFragment extends Fragment implements Observer, IRVDaysOn
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        fillIcons();
         initViews(view);
         setupDaysRV();
         isOnScreen = true;
         setSettings();
+    }
+
+    private static void fillIcons() {
+        icons.put("01d", R.drawable.i01d);
+        icons.put("01n", R.drawable.i01n);
+        icons.put("02d", R.drawable.i02d);
+        icons.put("02n", R.drawable.i02n);
+        icons.put("03d", R.drawable.i03d);
+        icons.put("03n", R.drawable.i03n);
+        icons.put("04d", R.drawable.i04d);
+        icons.put("04n", R.drawable.i04n);
+        icons.put("09d", R.drawable.i09d);
+        icons.put("09n", R.drawable.i09n);
+        icons.put("10d", R.drawable.i10d);
+        icons.put("10n", R.drawable.i10n);
+        icons.put("11d", R.drawable.i11d);
+        icons.put("11n", R.drawable.i11n);
+        icons.put("13d", R.drawable.i13d);
+        icons.put("13n", R.drawable.i13n);
+        icons.put("50d", R.drawable.i50d);
+        icons.put("50n", R.drawable.i50n);
     }
 
     private void setSettings() {
@@ -132,33 +158,42 @@ public class MainWeatherFragment extends Fragment implements Observer, IRVDaysOn
         humidityImageView = view.findViewById(R.id.humidityImageView);
         pressureImageView = view.findViewById(R.id.pressureImageView);
         cityInformationImageButton = view.findViewById(R.id.cityInformationImageButton);
-        citySelectionFAB = view.findViewById(R.id.citySelectionFAB);
         daysRV = view.findViewById(R.id.daysRV);
+        weatherImageView = view.findViewById(R.id.weatherImageView);
+        dayTextView = view.findViewById(R.id.dayTextView);
+
+        cityTextView.setText(dataContainer.cityName);
+        temperatureTextView.setText(dataContainer.currentTemperature);
+        windTextView.setText(dataContainer.currentWind);
+        humidityTextView.setText(dataContainer.currentHumidity);
+        pressureTextView.setText(dataContainer.currentPressure);
+
+        if (dataContainer.currentIcon != null) {
+            int icon = icons.get(dataContainer.currentIcon);
+            weatherImageView.setImageResource(icon);
+        }
+        if (dataContainer.dt != null) {
+            dayTextView.setText(dataContainer.dt);
+        }
     }
 
     private void setupDaysRV() {
-        DataRVClass[] dataRVClass = new DataRVClass[] {
-                new DataRVClass("Monday", getString(R.string.t), R.drawable.cloud1),
-                new DataRVClass("Tuesday", getString(R.string.t), R.drawable.cloudy3),
-                new DataRVClass("Wednesday", getString(R.string.t), R.drawable.rainy),
-                new DataRVClass("Thursday", getString(R.string.t), R.drawable.cloud1),
-                new DataRVClass("Friday", getString(R.string.t), R.drawable.snow),
-                new DataRVClass("Saturday", getString(R.string.t), R.drawable.sun),
-                new DataRVClass("Sunday", getString(R.string.t), R.drawable.weather),
-        };
-        ArrayList<DataRVClass> list = new ArrayList<>(dataRVClass.length);
-        list.addAll(Arrays.asList(dataRVClass).subList(0, dataContainer.daysCount));
+        if (dataContainer.dataRVClasses != null) {
+            DataRVClass[] dataRVClass = dataContainer.dataRVClasses;
+            ArrayList<DataRVClass> list = new ArrayList<>(dataRVClass.length);
+            list.addAll(Arrays.asList(dataRVClass).subList(0, dataContainer.daysCount));
 
-        LinearLayoutManager linearLayout = new LinearLayoutManager(requireContext());
-        adapter = new RecyclerDaysAdapter(list, this, requireContext());
+            LinearLayoutManager linearLayout = new LinearLayoutManager(requireContext());
+            adapter = new RecyclerDaysAdapter(list, this, requireContext());
 
-        ItemDivider itemDecoration = new ItemDivider(requireActivity().getBaseContext(),
-                LinearLayoutManager.VERTICAL, Objects.requireNonNull(ContextCompat.getDrawable(
-                getActivity().getBaseContext(), R.drawable.decorator_item)));
+            ItemDivider itemDecoration = new ItemDivider(requireActivity().getBaseContext(),
+                    LinearLayoutManager.VERTICAL, Objects.requireNonNull(ContextCompat.getDrawable(
+                    getActivity().getBaseContext(), R.drawable.decorator_item)));
 
-        daysRV.addItemDecoration(itemDecoration);
-        daysRV.setLayoutManager(linearLayout);
-        daysRV.setAdapter(adapter);
+            daysRV.addItemDecoration(itemDecoration);
+            daysRV.setLayoutManager(linearLayout);
+            daysRV.setAdapter(adapter);
+        }
     }
 
     private void setActionsViews() {
@@ -279,8 +314,10 @@ public class MainWeatherFragment extends Fragment implements Observer, IRVDaysOn
     }
 
     @Override
-    public void onItemClicked(String dayName, String dayTemperature, int drawableId) {
-        listener.onOpenDayForecast(dayName, dayTemperature, drawableId, dataContainer.cityName);
+    public void onItemClicked(String dayName, String dayTemperature, int drawableId,
+                              String wind, String humidity, String pressure) {
+        listener.onOpenDayForecast(dayName, dayTemperature, drawableId, dataContainer.cityName,
+                wind, humidity, pressure);
     }
 
     @Override

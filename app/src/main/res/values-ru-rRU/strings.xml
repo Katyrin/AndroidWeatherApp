@@ -50,4 +50,9 @@
     <string name="confirmation_save">Сохранить выбранные настройки?</string>
     <string name="forecast">Прогноз</string>
     <string name="about_us">О нас</string>
+    <string name="owm_url">https://api.openweathermap.org/data/2.5/weather?q=</string>
+    <string name="measure">&amp;units=metric</string>
+    <string name="request_language">&amp;lang=ru</string>
+    <string name="city_not_found">Город не найден. Пожалуйста, введите другой город</string>
+    <string name="no_internet">Интернет не доступен</string>
 </resources>
