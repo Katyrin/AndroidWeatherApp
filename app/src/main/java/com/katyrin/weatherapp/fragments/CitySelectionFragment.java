@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.katyrin.weatherapp.DataContainer;
 import com.katyrin.weatherapp.IRVCitiesOnItemClick;
 import com.katyrin.weatherapp.R;
 import com.katyrin.weatherapp.RecyclerCitiesAdapter;
@@ -35,6 +34,7 @@ public class CitySelectionFragment extends Fragment implements IRVCitiesOnItemCl
 
     public interface CitySelectionFragmentListener {
         void onScreenCitySelectionFragment();
+        void showForecast(String cityName);
     }
 
     private RecyclerView citiesRV;
@@ -44,7 +44,6 @@ public class CitySelectionFragment extends Fragment implements IRVCitiesOnItemCl
 
     public static Publisher publisher;
     private CitySelectionFragmentListener listener;
-    private DataContainer dataContainer = DataContainer.getInstance();
 
     @Nullable
     @Override
@@ -123,6 +122,7 @@ public class CitySelectionFragment extends Fragment implements IRVCitiesOnItemCl
                 Snackbar.make(requireActivity().findViewById(R.id.mainLayout), R.string.enter_city,
                         Snackbar.LENGTH_LONG).setAnchorView(R.id.nav_view).show();
             } else {
+                listener.showForecast(cityName);
                 setCityName(cityName);
             }
         }
@@ -154,11 +154,14 @@ public class CitySelectionFragment extends Fragment implements IRVCitiesOnItemCl
     @Override
     public void onItemCityClicked(String cityName) {
         setCityName(cityName);
+        listener.showForecast(cityName);
     }
 
     private void setCityName(String cityName) {
-        requireActivity().getSupportFragmentManager().popBackStack();
-        dataContainer.cityName = cityName;
+        int stackSize = requireActivity().getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i < stackSize; i++)
+            requireActivity().getSupportFragmentManager().popBackStack();
+
         if (isTabletLandscape()) {
             publisher.notify(cityName);
         }

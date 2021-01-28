@@ -11,6 +11,13 @@ public class DataContainer {
     public int daysCount;
     public String dayName;
     public String cityName;
+    public String currentTemperature;
+    public String currentPressure;
+    public String currentHumidity;
+    public String currentWind;
+    public String currentIcon;
+    public String dt;
+    public DataRVClass[] dataRVClasses;
 
     private static DataContainer instance;
 

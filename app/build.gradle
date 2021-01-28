@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     defaultConfig {
         applicationId "com.katyrin.weatherapp"
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -16,6 +16,14 @@ android {
 
         android.defaultConfig.vectorDrawables.useSupportLibrary = true
     }
+
+    buildTypes.each {
+        Properties properties = new Properties()
+        properties.load(project.rootProject.file("apikey.properties").newDataInputStream())
+        def weatherApiKey  = properties.getProperty("weather_api_key", "")
+        it.buildConfigField "String", "WEATHER_API_KEY", weatherApiKey
+    }
+
 
     buildTypes {
         release {
@@ -37,6 +45,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.navigation:navigation-fragment:2.3.2'
     implementation 'androidx.navigation:navigation-ui:2.3.2'
+    implementation 'com.google.code.gson:gson:2.8.6'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'

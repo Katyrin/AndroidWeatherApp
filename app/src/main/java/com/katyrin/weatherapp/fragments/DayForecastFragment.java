@@ -59,6 +59,13 @@ public class DayForecastFragment extends Fragment {
         cityName.setText(getArguments().getString("cityName"));
 
         setSettings();
+
+        if (isShowWind)
+            windTextView.setText(getArguments().getString("wind"));
+        if (isShowHumidity)
+            humidityTextView.setText(getArguments().getString("humidity"));
+        if (isShowPressure)
+            pressureTextView.setText(getArguments().getString("pressure"));
     }
 
     private void initViews(View view) {

@@ -12,12 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.katyrin.weatherapp.fragments.MainWeatherFragment;
+
 import java.util.ArrayList;
 
 public class RecyclerDaysAdapter extends RecyclerView.Adapter<RecyclerDaysAdapter.ViewHolder> {
-    private ArrayList<DataRVClass> dataDays;
-    private IRVDaysOnItemClick onItemClickCallBack;
-    private Context context;
+    private final ArrayList<DataRVClass> dataDays;
+    private final IRVDaysOnItemClick onItemClickCallBack;
+    private final Context context;
 
     public RecyclerDaysAdapter(ArrayList<DataRVClass> dataDays,
                                IRVDaysOnItemClick onItemClickCallBack, Context context) {
@@ -38,10 +40,15 @@ public class RecyclerDaysAdapter extends RecyclerView.Adapter<RecyclerDaysAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.dayName.setText(dataDays.get(position).dayName);
         holder.dayTemperature.setText(dataDays.get(position).dayTemperature);
+
+        int icon = MainWeatherFragment.icons.get(dataDays.get(position).icon);
+
         holder.dayImageView.setImageDrawable(ContextCompat.getDrawable(
-                context, dataDays.get(position).drawableId));
+                context, icon));
         setOnClickForItem(holder, dataDays.get(position).dayName,
-                dataDays.get(position).dayTemperature, dataDays.get(position).drawableId);
+                dataDays.get(position).dayTemperature, icon,
+                dataDays.get(position).windSpeed, dataDays.get(position).humidity,
+                dataDays.get(position).pressure);
     }
 
     @Override
@@ -50,15 +57,16 @@ public class RecyclerDaysAdapter extends RecyclerView.Adapter<RecyclerDaysAdapte
     }
 
     private void setOnClickForItem(@NonNull ViewHolder holder, String dayName, String dayTemperature,
-                                   int drawableId) {
+                                   int drawableId, String wind, String humidity, String pressure) {
         holder.dayItemLayout.setOnClickListener(v -> {
             if (onItemClickCallBack != null) {
-                onItemClickCallBack.onItemClicked(dayName, dayTemperature, drawableId);
+                onItemClickCallBack.onItemClicked(dayName, dayTemperature, drawableId,
+                        wind, humidity, pressure);
             }
         });
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         FrameLayout dayItemLayout;
         TextView dayName;
         TextView dayTemperature;

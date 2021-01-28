@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 public class RecyclerCitiesAdapter extends RecyclerView.Adapter<RecyclerCitiesAdapter.ViewHolder> {
-    private ArrayList<String> citiesData;
-    private IRVCitiesOnItemClick onItemClickCallBack;
+    private final ArrayList<String> citiesData;
+    private final IRVCitiesOnItemClick onItemClickCallBack;
 
     public RecyclerCitiesAdapter(ArrayList<String> citiesData, IRVCitiesOnItemClick onItemClickCallBack) {
         this.citiesData = citiesData;
@@ -25,7 +25,7 @@ public class RecyclerCitiesAdapter extends RecyclerView.Adapter<RecyclerCitiesAd
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).
                 inflate(R.layout.item_city_rv_layout, parent, false);
-        return new RecyclerCitiesAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class RecyclerCitiesAdapter extends RecyclerView.Adapter<RecyclerCitiesAd
         return citiesData == null ? 0 : citiesData.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         TextView cityNameTextView;
         FrameLayout cityItemLayout;
         public ViewHolder(@NonNull View itemView) {
