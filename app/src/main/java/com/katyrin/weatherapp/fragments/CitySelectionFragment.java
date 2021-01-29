@@ -158,10 +158,6 @@ public class CitySelectionFragment extends Fragment implements IRVCitiesOnItemCl
     }
 
     private void setCityName(String cityName) {
-        int stackSize = requireActivity().getSupportFragmentManager().getBackStackEntryCount();
-        for (int i = 0; i < stackSize; i++)
-            requireActivity().getSupportFragmentManager().popBackStack();
-
         if (isTabletLandscape()) {
             publisher.notify(cityName);
         }

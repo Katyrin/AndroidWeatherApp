@@ -54,4 +54,11 @@
     <string name="request_language">&amp;lang=en</string>
     <string name="city_not_found">City not found. Please enter another city</string>
     <string name="no_internet">Internet is not available</string>
+    <string name="search">Search</string>
+    <string name="select_city">Select City</string>
+    <string name="navigation_drawer_open">Open menu</string>
+    <string name="navigation_drawer_close">Close menu</string>
+    <string name="attention">Attention</string>
+    <string name="close_message">Are you sure you want to exit the application?</string>
+    <string name="exit">Exit</string>
 </resources>

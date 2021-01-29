@@ -12,6 +12,7 @@ public class DataContainer {
     public String dayName;
     public String cityName;
     public String currentTemperature;
+    public String currentDescription;
     public String currentPressure;
     public String currentHumidity;
     public String currentWind;

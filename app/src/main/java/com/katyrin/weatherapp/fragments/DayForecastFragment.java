@@ -36,7 +36,7 @@ public class DayForecastFragment extends Fragment {
     private boolean isShowWind = true;
     private boolean isShowHumidity = true;
     private boolean isShowPressure = true;
-    private DataContainer dataContainer = DataContainer.getInstance();
+    private final DataContainer dataContainer = DataContainer.getInstance();
 
     @Nullable
     @Override

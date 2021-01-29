@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/nav_header_height"
+    android:background="@drawable/side_nav_bar"
+    android:padding="@dimen/margin"
+    android:gravity="bottom"
+    android:id="@+id/headerMain"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        android:paddingTop="@dimen/between_layouts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/weatherImageView"
+            android:layout_width="@dimen/zero_size"
+            android:layout_weight="1"
+            android:layout_height="@dimen/big_size"
+            android:paddingTop="@dimen/between_layouts"
+            android:contentDescription="@string/weather_image"/>
+
+        <TextView
+            android:id="@+id/temperatureTextView"
+            android:layout_width="@dimen/zero_size"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            style="@style/MyTheme.HeadStyle.Bold.Orange"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/descriptionTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/MyTheme.HeadStyle"
+        android:layout_marginBottom="@dimen/zero_size"/>
+
+</LinearLayout>
