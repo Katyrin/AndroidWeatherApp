@@ -1,6 +1,5 @@
 package com.katyrin.weatherapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -11,22 +10,28 @@ import android.os.Handler;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.katyrin.weatherapp.fragments.AboutUsFragment;
 import com.katyrin.weatherapp.fragments.CitySelectionFragment;
 import com.katyrin.weatherapp.fragments.DayForecastFragment;
 import com.katyrin.weatherapp.fragments.MainWeatherFragment;
+import com.katyrin.weatherapp.fragments.MyBottomSheetDialogFragment;
 import com.katyrin.weatherapp.fragments.SaveCastFragment;
 import com.katyrin.weatherapp.fragments.SettingsFragment;
 import com.katyrin.weatherapp.model.WeatherRequest;
@@ -49,7 +54,10 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     private CitySelectionFragment citySelectionFragment;
     private Fragment fragment;
     private FloatingActionButton citySelectionFAB;
-    private BottomNavigationView navView;
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
+    private NavigationView navigationView;
+    private View headerView;
     private final SaveCastFragment castFragment = SaveCastFragment.getInstance();
     private final DataContainer dataContainer = DataContainer.getInstance();
 
@@ -57,10 +65,12 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         isTabletLandscape = isTabletLandscape();
+        initNavigationMenu();
+        updateNavView();
 
         if (savedInstanceState == null) {
             firstSetDataContainer();
@@ -87,23 +97,37 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
         if (!MainActivity.isTabletLandscape)
             citySelectionFAB.setOnClickListener(v -> onOpenCitySelectionFragment());
 
-        navView = findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(item -> {
+        castFragment.fragment = fragment;
+    }
+
+    private void initNavigationMenu() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+        headerView = navigationView.getHeaderView(0);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout,
+                toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        navigationView.setNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case (R.id.navigation_forecast):
+                case (R.id.navigation_forecast): {
                     onOpenMainWeatherFragment(true);
-                    return true;
-                case (R.id.navigation_settings):
+                    break;
+                }
+                case (R.id.navigation_settings): {
                     openSettingsFragment();
-                    return true;
-                case (R.id.navigation_about_us):
+                    break;
+                }
+                case (R.id.navigation_about_us): {
                     openAboutUsFragment();
-                    return true;
+                    break;
+                }
             }
+            drawerLayout.close();
             return false;
         });
-
-        castFragment.fragment = fragment;
     }
 
     private void firstSetDataContainer() {
@@ -124,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     }
 
     private void onOpenMainWeatherFragment(boolean isAddToBackStack) {
+        navigationView.setCheckedItem(R.id.navigation_forecast);
         if (fragment == null || !(fragment instanceof MainWeatherFragment)) {
             fragment = new MainWeatherFragment();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -139,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     }
 
     private void openSettingsFragment() {
+        navigationView.setCheckedItem(R.id.navigation_settings);
         if (fragment == null || !(fragment instanceof SettingsFragment)) {
             fragment = new SettingsFragment();
 
@@ -158,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
     }
 
     private void openAboutUsFragment() {
+        navigationView.setCheckedItem(R.id.navigation_forecast);
         if (fragment == null || !(fragment instanceof AboutUsFragment)) {
             fragment = new AboutUsFragment();
 
@@ -188,9 +215,28 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
             case (R.id.settings):
                 openSettingsFragment();
                 return true;
+            case (R.id.search):
+                openSearchDialogFragment();
             default:
                 return false;
         }
+    }
+
+    private void openSearchDialogFragment() {
+        MyBottomSheetDialogFragment dialogFragment = MyBottomSheetDialogFragment.newInstance();
+        dialogFragment.setMyBottomSheetDialogFragmentListener(dialogListener);
+        dialogFragment.show(getSupportFragmentManager(),"dialog_fragment");
+    }
+
+    MyBottomSheetDialogFragment.MyBottomSheetDialogFragmentListener dialogListener = (cityName) -> {
+        backToMainFragment();
+        new Request(cityName, this);
+            };
+
+    private void backToMainFragment() {
+        int stackSize = getSupportFragmentManager().getBackStackEntryCount();
+        for (int i = 0; i < stackSize; i++)
+            getSupportFragmentManager().popBackStack();
     }
 
     private boolean isTabletLandscape() {
@@ -252,8 +298,10 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
 
     @Override
     public void showForecast(String cityName) {
-        if (isNetworkAvailable())
+        if (isNetworkAvailable()) {
+            backToMainFragment();
             new Request(cityName, this);
+        }
         else
             Snackbar.make(findViewById(R.id.mainLayout), getString(R.string.no_internet),
                     Snackbar.LENGTH_LONG).setAnchorView(R.id.nav_view).show();
@@ -317,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
         String currentWind = numberFormat.format(weatherRequest.getWind().getSpeed())
                 + getString(R.string.speed);
         String currentIcon = weatherRequest.getWeather()[0].getIcon();
+        String description = weatherRequest.getWeather()[0].getDescription();
 
         dataContainer.cityName = cityName;
         dataContainer.currentTemperature = currentTemperature;
@@ -325,10 +374,24 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
         dataContainer.currentWind = currentWind;
         dataContainer.currentIcon = currentIcon;
         dataContainer.dt = convertTimeStampToDay(weatherRequest.getDt());
+        dataContainer.currentDescription = description;
         new Request(weatherRequest.getCoord().getLat(), weatherRequest.getCoord().getLon(), this);
+
+        updateNavView();
     }
 
+    private void updateNavView() {
+        TextView temperatureTextView = headerView.findViewById(R.id.temperatureTextView);
+        TextView descriptionTextView = headerView.findViewById(R.id.descriptionTextView);
+        ImageView weatherImageView = headerView.findViewById(R.id.weatherImageView);
 
+        temperatureTextView.setText(dataContainer.currentTemperature);
+        descriptionTextView.setText(dataContainer.currentDescription);
+        if (dataContainer.currentIcon != null) {
+            int icon = MainWeatherFragment.icons.get(dataContainer.currentIcon);
+            weatherImageView.setImageResource(icon);
+        }
+    }
 
     private void displayWatcherRV(WeatherRequest weatherRequest) {
         NumberFormat numberFormat = NumberFormat.getInstance();
@@ -376,5 +439,22 @@ public class MainActivity extends AppCompatActivity implements PublisherGetter,
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    public void onBackPressed() {
+        int stackSize = getSupportFragmentManager().getBackStackEntryCount();
+        if (stackSize > 0) {
+            backToMainFragment();
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.attention).setMessage(R.string.close_message)
+                    .setPositiveButton(R.string.cancel, (dialogInterface, i) ->
+                            dialogInterface.dismiss())
+                    .setNegativeButton(R.string.exit, (dialogInterface, i) -> {
+                        dialogInterface.dismiss();
+                        super.onBackPressed();
+                    }).create().show();
+        }
     }
 }

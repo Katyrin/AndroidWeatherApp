@@ -55,4 +55,11 @@
     <string name="request_language">&amp;lang=ru</string>
     <string name="city_not_found">Город не найден. Пожалуйста, введите другой город</string>
     <string name="no_internet">Интернет не доступен</string>
+    <string name="search">Поиск</string>
+    <string name="select_city">Выбрать город</string>
+    <string name="navigation_drawer_open">Открыть меню</string>
+    <string name="navigation_drawer_close">Закрыть меню</string>
+    <string name="attention">Внимание</string>
+    <string name="close_message">Вы действительно хотите выйти из приложения?</string>
+    <string name="exit">Выход</string>
 </resources>

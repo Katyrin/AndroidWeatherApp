@@ -7,4 +7,5 @@
     <dimen name="head">36sp</dimen>
     <dimen name="head2">20sp</dimen>
     <dimen name="margin">16dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
 </resources>

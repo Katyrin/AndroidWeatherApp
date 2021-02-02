@@ -24,9 +24,9 @@ public class Request {
         void requestListenerCallBack(int i, Handler handler, WeatherRequest weatherRequest);
     }
 
-    private String urlString;
+    private final String urlString;
     private final Context context;
-    private RequestListener listener;
+    private final RequestListener listener;
 
     public static final String TAG = "WEATHER";
     public static final String WEATHER_API_KEY = BuildConfig.WEATHER_API_KEY;
